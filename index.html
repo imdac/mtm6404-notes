@@ -4,13 +4,87 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Notes</title>
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
+  <script src="https://www.gstatic.com/firebasejs/8.3.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.3.1/firebase-firestore.js"></script>
+  <script src="https://unpkg.com/vue@3"></script>
+  <script src="https://unpkg.com/vue-router@4"></script>
 </head>
 <body>
+  <main id="app" class="container py-5">
+    
+    <template v-if="view === 'notes'">
+      <section class="row">
+        <div class="col-12 d-flex justify-content-end">
+          <a class="btn btn-outline-secondary" href="#" @click.prevent="setView('new')">+</a>
+        </div>
+        <div class="col-12">
+          <h1 class="display-4">Notes</h1>
+        </div>
+        <div class="col-12">
+          <ul class="list-group">
+            <li class="list-group-item" v-for="note in notes">
+              <a class="text-secondary text-decoration-none" href="#" @click.prevent="setView('note')">{{ note.title }}</a>
+            </li>
+          </ul>
+        </div>
+      </section>
+    </template>
+
+    <template v-if="view === 'note'">
+      <section class="row">
+        <div class="col-6">
+          <a class="text-secondary text-decoration-none" href="#" @click.prevent="setView('notes')">&lt; Back</a>
+        </div>
+        <div class="col-6 d-flex justify-content-end">
+          <a class="btn btn-outline-secondary" href="#" @click.prevent="setView('edit')">Edit</a>
+        </div>
+        <div class="col-12">
+          <h1 class="display-4">{{ note.title }}</h1>
+          <div>{{ note.text }}</div>
+        </div>
+      </section>
+    </template>
+
+    <template v-if="view === 'new'">
+      <section class="row">
+        <div class="col-12 d-flex">
+          <a class="text-secondary text-decoration-none" href="#" @click.prevent="setView('notes')">&lt; Back</a>
+        </div>
+        <div class="col-12">
+          <h1 class="display-4">New Note</h1>
+        </div>
+        <div class="col-12">
+          <form @submit.prevent="">
+            <input type="text" class="form-control my-3" placeholder="Title" v-model="title">
+            <textarea class="form-control my-3" placeholder="New Note" v-model="text"></textarea>
+            <button class="btn btn-primary mr-3">Add Note</button>
+          </form> 
+        </div>
+      </section>
+    </template>
+
+    <template v-if="view === 'edit'">
+      <section class="row">
+        <div class="col-12 d-flex">
+          <a class="text-secondary text-decoration-none" href="#" @click.prevent="setView('note')">&lt; Back</a>
+        </div>
+        <div class="col-12">
+          <h1 class="display-4">Edit Note</h1>
+        </div>
+        <div class="col-12">
+          <form @submit.prevent="">
+            <input type="text" class="form-control my-3" placeholder="Title" v-model="title">
+            <textarea class="form-control my-3" placeholder="New Note" v-model="text"></textarea>
+            <button type="submit" class="btn btn-outline-primary me-3">Update Note</button>
+            <button class="btn btn-outline-danger" @click.prevent="">Delete</button>
+          </form>
+        </div>
+      </section>
+    </template>
+
+  </div>
   
-  <script src="https://www.gstatic.com/firebasejs/8.0.2/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.0.2/firebase-firestore.js"></script>
-  <script src="https://unpkg.com/vue/dist/vue.js"></script>
-  <script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
+  <script src="app.js"></script>
 </body>
 </html>
